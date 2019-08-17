@@ -21,21 +21,31 @@ public class SimpleAdapter extends BaseAdapter {
     protected int mViewTypeCount = 0;
 
     public SimpleAdapter(Context context, List<SimpleItem> items) {
-        mContext = context;
-        mItems = items;
-        mViewTypeSet = new HashSet<>();
-        if (items != null) {
-            for (SimpleItem item : items) {
-                mViewTypeSet.add(item.getViewType());
-            }
-        }
+        init(context, items);
     }
 
     public SimpleAdapter(Context context, List<SimpleItem> items, int viewTypeCount) {
-        mContext = context;
-        mItems = items;
         if (viewTypeCount >= 1) {
             mViewTypeCount = viewTypeCount;
+        }
+        init(context, items);
+    }
+
+    private void init(Context context, List<SimpleItem> items) {
+        mContext = context;
+        mItems = items;
+        mViewTypeSet = new HashSet<>();
+        if (mViewTypeCount <= 0) {
+            if (items != null) {
+                for (SimpleItem item : items) {
+                    mViewTypeSet.add(item.getViewType());
+                }
+            }
+            if(mViewTypeSet.size() == 0){
+                mViewTypeCount = 1;
+            }else{
+                mViewTypeCount = mViewTypeSet.size();
+            }
         }
     }
 
@@ -73,11 +83,6 @@ public class SimpleAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        if (mViewTypeCount > 0) {
-            return mViewTypeCount;
-        } else {
-            return mViewTypeSet.size() == 0 ? 1 : mViewTypeSet.size();
-        }
+       return mViewTypeCount;
     }
 }
-

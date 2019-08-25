@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="StickMovableLayout">
+        <attr name="head" format="reference"/>
+        <attr name="body" format="reference"/>
+        <attr name="stick" format="reference"/>
+    </declare-styleable>
+
+
+</resources>

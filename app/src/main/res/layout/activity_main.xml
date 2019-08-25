@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.android.hutils.widgets.StickMovableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.hdemo.MainActivity">
+    custom:head="@id/head"
+    custom:body="@id/list"
+    custom:stick="@id/stick">
 
-    <ListView
+    <LinearLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="#FF0000"/>
+
+        <View
+            android:id="@+id/stick"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#00FF00"/>
+
+    </LinearLayout>
+
+    <com.android.hutils.widgets.NestedListView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"></com.android.hutils.widgets.NestedListView>
+
+</com.android.hutils.widgets.StickMovableLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+

@@ -1,5 +1,6 @@
 package com.android.hdemo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -12,24 +13,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
-    List<SimpleItem> mList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        listView = findViewById(R.id.list);
-        mList = new ArrayList<>();
-        for(int i=0;i<20;i++){
-            mList.add(new Item1("姓名"+i));
-        }
-        for(int i=0;i<30;i++){
-            mList.add(new Item2("地址"+i));
-        }
-        for(int i=0;i<20;i++){
-            mList.add(new Item1("姓名"+i));
-        }
-        listView.setAdapter(new SimpleAdapter(this,mList));
+        setContentView(R.layout.first);
+
+        findViewById(R.id.jump).setOnClickListener((view)->{
+           Intent intent = new Intent(this,SecondActivity.class);
+           startActivity(intent);
+        });
     }
 }

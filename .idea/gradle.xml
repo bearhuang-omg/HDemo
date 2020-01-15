@@ -9,6 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/hbind" />
             <option value="$PROJECT_DIR$/hluncher" />
             <option value="$PROJECT_DIR$/hutils" />
           </set>

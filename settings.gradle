@@ -1,1 +1,1 @@
-include ':app', ':hutils', ':hluncher'
+include ':app', ':hutils', ':hluncher', ':hbind'

@@ -11,5 +11,11 @@
         android:layout_height="100dp"
         android:text="跳转"/>
 
+    <Button
+        android:id="@+id/jump2"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="跳转2"/>
+
 
 </LinearLayout>

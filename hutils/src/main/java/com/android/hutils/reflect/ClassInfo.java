@@ -189,20 +189,15 @@ public class ClassInfo {
         return null;
     }
 
-    /**
-     * 执行无参的method
-     * @param methodName
-     * @return
-     */
-    public Object executeMethod(String methodName) {
-        try {
+    public Object executeMethod(String methodName, Object... params) {
+        if (params == null || params.length == 0) {
             Method method = getMethod(methodName);
-            if (method != null) {
-                method.setAccessible(true);
-                return method.invoke(mObj);
+            if(method != null){
+                return executeMethod(method);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            Method method = getMethod(methodName);
+            return executeMethod(method, params);
         }
         return null;
     }

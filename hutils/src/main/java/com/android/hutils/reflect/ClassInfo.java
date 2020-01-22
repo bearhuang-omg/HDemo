@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by huangbei on 20-1-15.
@@ -12,16 +14,14 @@ import java.lang.reflect.Method;
 public class ClassInfo {
 
     private Constructor[] mConstructors;
-    private Field[] mFields;
-    private Method[] mMethods;
+    private List<Field> mFields;
+    private List<Method> mMethods;
     private Annotation[] mClassAnnotations;
     private Class mClass;
 
     public ClassInfo(Class cls){
         mClass = cls;
         mConstructors = mClass.getDeclaredConstructors();
-        mMethods = mClass.getMethods();
-        mFields = mClass.getDeclaredFields();
         mClassAnnotations = mClass.getAnnotations();
     }
 
@@ -29,14 +29,31 @@ public class ClassInfo {
         return mConstructors;
     }
 
-    public Field[] getFields() {
+    public List<Field> getFields() {
+        if (mFields == null) {
+            mFields = new ArrayList<>();
+            try {
+                Class cls = mClass;
+                for (; cls != Object.class; cls = cls.getSuperclass()) {
+                    for (Field field : cls.getDeclaredFields()) {
+                        mFields.add(field);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return mFields;
     }
 
     public Field getField(String name) {
         try {
             if (mClass != null) {
-                return mClass.getDeclaredField(name);
+                for(Field field : getFields()){
+                    if(field.getName().equals(name)){
+                        return field;
+                    }
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -67,7 +84,20 @@ public class ClassInfo {
         }
     }
 
-    public Method[] getMethods() {
+    public List<Method> getMethods() {
+        if(mMethods == null){
+            mMethods = new ArrayList<>();
+            try {
+                Class cls = mClass;
+                for(;cls != Object.class;cls = cls.getSuperclass()){
+                    for(Method method : cls.getDeclaredMethods()){
+                        mMethods.add(method);
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         return mMethods;
     }
 

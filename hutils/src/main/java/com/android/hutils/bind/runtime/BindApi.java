@@ -14,12 +14,12 @@ import java.lang.reflect.Method;
 public class BindApi {
 
     public static void bindId(Activity obj){
-        ClassInfo clsInfo = new ClassInfo(obj.getClass());
+        ClassInfo clsInfo = new ClassInfo(obj);
         //处理类
         if(obj.getClass().isAnnotationPresent(RuntimeBindView.class)) {
             RuntimeBindView bindView = (RuntimeBindView)clsInfo.getClassAnnotation(RuntimeBindView.class);
             int id = bindView.value();
-            clsInfo.executeMethod(clsInfo.getMethod("setContentView",int.class),obj,id);
+            clsInfo.executeMethod(clsInfo.getMethod("setContentView",int.class),id);
         }
 
         //处理类成员
@@ -27,8 +27,8 @@ public class BindApi {
             if(field.isAnnotationPresent(RuntimeBindView.class)){
                 RuntimeBindView bindView = field.getAnnotation(RuntimeBindView.class);
                 int id = bindView.value();
-                Object view = clsInfo.executeMethod(clsInfo.getMethod("findViewById",int.class),obj,id);
-                clsInfo.setField(field,obj,view);
+                Object view = clsInfo.executeMethod(clsInfo.getMethod("findViewById",int.class),id);
+                clsInfo.setFieldValue(field,view);
             }
         }
 
@@ -37,7 +37,7 @@ public class BindApi {
             if (method.isAnnotationPresent(RuntimeBindClick.class)) {
                 int[] values = method.getAnnotation(RuntimeBindClick.class).value();
                 for (int id : values) {
-                    View view = (View) clsInfo.executeMethod(clsInfo.getMethod("findViewById", int.class), obj, id);
+                    View view = (View) clsInfo.executeMethod(clsInfo.getMethod("findViewById", int.class), id);
                     view.setOnClickListener(v -> {
                         try {
                             method.invoke(obj, v);

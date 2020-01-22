@@ -4,6 +4,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by huangbei on 20-1-15.
@@ -12,16 +15,16 @@ import java.lang.reflect.Method;
 public class ClassInfo {
 
     private Constructor[] mConstructors;
-    private Field[] mFields;
-    private Method[] mMethods;
+    private List<Field> mFields;
+    private List<Method> mMethods;
     private Annotation[] mClassAnnotations;
+    private Object mObj;
     private Class mClass;
 
-    public ClassInfo(Class cls){
-        mClass = cls;
+    public ClassInfo(Object obj) {
+        mObj = obj;
+        mClass = obj.getClass();
         mConstructors = mClass.getDeclaredConstructors();
-        mMethods = mClass.getMethods();
-        mFields = mClass.getDeclaredFields();
         mClassAnnotations = mClass.getAnnotations();
     }
 
@@ -29,52 +32,119 @@ public class ClassInfo {
         return mConstructors;
     }
 
-    public Field[] getFields() {
+    public List<Field> getFields() {
+        if (mFields == null) {
+            mFields = new ArrayList<>();
+            try {
+                Class cls = mClass;
+                for (; cls != Object.class; cls = cls.getSuperclass()) {
+                    for (Field field : cls.getDeclaredFields()) {
+                        mFields.add(field);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return mFields;
     }
 
     public Field getField(String name) {
         try {
             if (mClass != null) {
-                return mClass.getDeclaredField(name);
+                for (Field field : getFields()) {
+                    if (field.getName().equals(name)) {
+                        return field;
+                    }
+                }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public void setField(String fieldName,Object obj,Object fieldValue){
+    public void setFieldValue(String fieldName, Object fieldValue) {
         Field field = getField(fieldName);
-        if(field != null){
+        if (field != null) {
             try {
                 field.setAccessible(true);
-                field.set(obj, fieldValue);
-            }catch (Exception e){
+                field.set(mObj, fieldValue);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void setField(Field field,Object obj,Object fieldValue){
-        if(field != null){
+    public void setFieldValue(Field field, Object fieldValue) {
+        if (field != null) {
             try {
                 field.setAccessible(true);
-                field.set(obj, fieldValue);
-            }catch (Exception e){
+                field.set(mObj, fieldValue);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public Method[] getMethods() {
+    public Object getFieldValue(Field field) {
+        try {
+            field.setAccessible(true);
+            return field.get(mObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Object getFieldValue(String fieldName) {
+        try {
+            Field field = getField(fieldName);
+            return getFieldValue(field);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Method> getMethods() {
+        if (mMethods == null) {
+            mMethods = new ArrayList<>();
+            try {
+                Class cls = mClass;
+                for (; cls != Object.class; cls = cls.getSuperclass()) {
+                    for (Method method : cls.getDeclaredMethods()) {
+                        mMethods.add(method);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return mMethods;
     }
 
-    public Method getMethod(String name, Class... parameterTypes) {
+    public Method getMethod(String methodName, Class... parameterTypes) {
         try {
             if (mClass != null) {
-                return mClass.getMethod(name, parameterTypes);
+                for (Method method : getMethods()) {
+                    if (method.getName().equals(methodName)) {
+                        Parameter[] parameters = method.getParameters();
+                        if ((parameterTypes == null || parameterTypes.length == 0) && (parameters == null || parameters.length == 0)) {
+                            return method;
+                        } else if (parameters.length != parameterTypes.length) {
+                            return null;
+                        } else {
+                            for (int i = 0; i < parameters.length; i++) {
+                                if (!parameters[i].getType().equals(parameterTypes[i])) {
+                                    return null;
+                                }
+                            }
+                        }
+                        return method;
+                    }
+                }
+                return mClass.getMethod(methodName, parameterTypes);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,18 +170,17 @@ public class ClassInfo {
     /**
      * 执行无参和有参的method
      * @param method
-     * @param obj
      * @param params
      * @return
      */
-    public Object executeMethod(Method method, Object obj, Object... params) {
+    public Object executeMethod(Method method,Object... params) {
         if (method != null) {
             try {
                 method.setAccessible(true);
                 if(method.getParameterCount() == 0){
-                    return method.invoke(obj);
+                    return method.invoke(mObj);
                 }else {
-                    return method.invoke(obj, params);
+                    return method.invoke(mObj, params);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -123,15 +192,14 @@ public class ClassInfo {
     /**
      * 执行无参的method
      * @param methodName
-     * @param obj
      * @return
      */
-    public Object executeMethod(String methodName, Object obj) {
+    public Object executeMethod(String methodName) {
         try {
             Method method = getMethod(methodName);
             if (method != null) {
                 method.setAccessible(true);
-                return method.invoke(obj);
+                return method.invoke(mObj);
             }
         } catch (Exception e) {
             e.printStackTrace();

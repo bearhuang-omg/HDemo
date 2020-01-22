@@ -6,8 +6,6 @@ import android.util.Log;
 
 import com.android.hdemo.loader.MyClassLoader;
 import com.android.hutils.reflect.ClassInfo;
-
-
 public class BaseApplication extends Application {
 
     @Override

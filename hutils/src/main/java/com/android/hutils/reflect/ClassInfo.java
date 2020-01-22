@@ -108,16 +108,16 @@ public class ClassInfo {
     }
 
     public List<Method> getMethods() {
-        if (mMethods == null) {
+        if(mMethods == null){
             mMethods = new ArrayList<>();
             try {
                 Class cls = mClass;
-                for (; cls != Object.class; cls = cls.getSuperclass()) {
-                    for (Method method : cls.getDeclaredMethods()) {
+                for(;cls != Object.class;cls = cls.getSuperclass()){
+                    for(Method method : cls.getDeclaredMethods()){
                         mMethods.add(method);
                     }
                 }
-            } catch (Exception e) {
+            }catch (Exception e){
                 e.printStackTrace();
             }
         }

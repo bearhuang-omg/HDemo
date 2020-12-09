@@ -3,10 +3,15 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HDemo.iml" filepath="$PROJECT_DIR$/HDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/HDemo-app.iml" filepath="$PROJECT_DIR$/app/HDemo-app.iml" group="HDemo/app" />
+      <module fileurl="file://$PROJECT_DIR$/hbind/HDemo-hbind.iml" filepath="$PROJECT_DIR$/hbind/HDemo-hbind.iml" group="HDemo/hbind" />
+      <module fileurl="file://$PROJECT_DIR$/hluncher/HDemo-hluncher.iml" filepath="$PROJECT_DIR$/hluncher/HDemo-hluncher.iml" group="HDemo/hluncher" />
+      <module fileurl="file://$PROJECT_DIR$/hutils/HDemo-hutils.iml" filepath="$PROJECT_DIR$/hutils/HDemo-hutils.iml" group="HDemo/hutils" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/hbind/hbind.iml" filepath="$PROJECT_DIR$/hbind/hbind.iml" />
       <module fileurl="file://$PROJECT_DIR$/hluncher/hluncher.iml" filepath="$PROJECT_DIR$/hluncher/hluncher.iml" />
       <module fileurl="file://$PROJECT_DIR$/hutils/hutils.iml" filepath="$PROJECT_DIR$/hutils/hutils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/projects-demo-HDemo.iml" filepath="$PROJECT_DIR$/projects-demo-HDemo.iml" group="HDemo" />
     </modules>
   </component>
 </project>
